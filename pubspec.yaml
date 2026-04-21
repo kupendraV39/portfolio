@@ -1,0 +1,77 @@
+name: portfolio_3d
+description: 3D Portfolio — Flutter (Mobile, Tablet, Web)
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.2.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Firebase (replaces Firebase SDK)
+  firebase_core: ^2.0.0
+  cloud_firestore: ^4.0.0
+
+  # Navigation
+  go_router: ^13.2.0
+
+  # Animations (replaces framer-motion)
+  flutter_animate: ^4.5.0
+
+  # 3D Models (replaces Three.js)
+  model_viewer_plus: ^1.7.0
+
+  # HTTP for Contact form (EmailJS REST API)
+  http: ^1.2.1
+
+  # Responsive layout
+  responsive_framework: ^1.4.0
+
+  # Scroll-triggered animations
+  visibility_detector: ^0.4.0+2
+
+  # Smooth scroll to sections
+  scrollable_positioned_list: ^0.3.8
+
+  # URL launcher (open GitHub links)
+  url_launcher: ^6.2.5
+
+  # Google Fonts (Poppins — matches React project)
+  google_fonts: ^6.2.1
+
+  # SVG support (for threejs.svg, logo.svg, etc.)
+  flutter_svg: ^2.0.10+1
+
+  # Environment variables (.env for EmailJS keys)
+  flutter_dotenv: ^5.1.0
+
+  cupertino_icons: ^1.0.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    # Root images
+    - assets/images/
+
+    # Tech icons
+    - assets/images/tech/
+
+    # Company logos
+    - assets/images/company/
+
+    # 3D Models
+    - assets/models/desktop_pc/
+    - assets/models/desktop_pc/textures/
+    - assets/models/planet/
+    - assets/models/planet/textures/
+
+    # Env file
+    - .env
