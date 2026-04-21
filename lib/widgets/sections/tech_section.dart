@@ -143,7 +143,7 @@ class _TechBallState extends State<_TechBall>
               duration: 500.ms,
             )
             .scale(
-              begin: const Offset(0.5, 0.5),
+               begin: const Offset(0.5, 0.5),
               delay: Duration(milliseconds: widget.index * 80),
               duration: 500.ms,
               curve: Curves.easeOutBack,
