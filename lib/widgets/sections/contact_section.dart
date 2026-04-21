@@ -1,9 +1,8 @@
-import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
+import 'package:portfolio_3d/utils/app_toast.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_config.dart';
 import '../../utils/responsive.dart';
@@ -35,50 +34,27 @@ class _ContactSectionState extends State<ContactSection> {
 
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
+
     setState(() => _loading = true);
 
     try {
-      final response = await http.post(
-        Uri.parse('https://api.emailjs.com/api/v1.0/email/send'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'service_id': dotenv.env['EMAILJS_SERVICE_ID'] ?? '',
-          'template_id': dotenv.env['EMAILJS_TEMPLATE_ID'] ?? '',
-          'user_id': dotenv.env['EMAILJS_PUBLIC_KEY'] ?? '',
-          'template_params': {
-            'form_name': _nameCtrl.text,
-            'to_name': AppConfig.fullName,
-            'from_email': _emailCtrl.text,
-            'to_email': AppConfig.email,
-            'message': _messageCtrl.text,
-          },
-        }),
-      );
+      await FirebaseFirestore.instance.collection('contacts').add({
+        'name': _nameCtrl.text,
+        'email': _emailCtrl.text,
+        'message': _messageCtrl.text,
+        'createdAt': Timestamp.now(),
+      });
 
-      if (response.statusCode == 200) {
-        _nameCtrl.clear();
-        _emailCtrl.clear();
-        _messageCtrl.clear();
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                  'Thank you! I will get back to you as soon as possible.'),
-              backgroundColor: AppColors.accent,
-            ),
-          );
-        }
-      } else {
-        throw Exception('Failed: ${response.statusCode}');
+      _nameCtrl.clear();
+      _emailCtrl.clear();
+      _messageCtrl.clear();
+
+      if (mounted) {
+        AppToast.showSuccess(context, "Message sent successfully!");
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Something went wrong. Please try again.'),
-            backgroundColor: Colors.redAccent,
-          ),
-        );
+        AppToast.showError(context, "Failed to send message");
       }
     } finally {
       if (mounted) setState(() => _loading = false);
