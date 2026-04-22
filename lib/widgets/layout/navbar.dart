@@ -146,7 +146,6 @@ class _AppNavbarState extends State<AppNavbar> {
           ),
         ),
 
-        // ✅ THIS LINE WAS MISSING
         if (isMobile && _menuOpen)
           Positioned.fill(
             child: MobileNavMenu(
@@ -256,82 +255,3 @@ class MobileNavMenu extends StatelessWidget {
     );
   }
 }
-
-/// Mobile dropdown menu (shown when hamburger is open)
-// class MobileNavMenu extends StatelessWidget {
-//   const MobileNavMenu({
-//     super.key,
-//     required this.activeSection,
-//     required this.onNavTap,
-//     required this.onClose,
-//     required this.paddingH,
-//   });
-
-//   final String? activeSection;
-//   final void Function(int) onNavTap;
-//   final VoidCallback onClose;
-//   final double paddingH;
-
-//   int _indexForId(String id) {
-//     switch (id) {
-//       case 'about':
-//         return 1;
-//       case 'work':
-//         return 3;
-//       case 'contact':
-//         return 6;
-//       default:
-//         return 0;
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Positioned(
-//       top: 70,
-//       right: paddingH,
-//       child: Container(
-//         constraints: const BoxConstraints(minWidth: 140),
-//         decoration: BoxDecoration(
-//           color: AppColors.black100,
-//           borderRadius: BorderRadius.circular(12),
-//         ),
-//         padding: const EdgeInsets.all(20),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: navLinks.map((nav) {
-//             final isActive = activeSection == nav.id;
-//             return GestureDetector(
-//               // onTap: () {
-//               //   onNavTap(_indexForId(nav.id));
-//               //   onClose();
-//               // },
-//               onTap: () {
-//                 if (nav.id == 'download') {
-//                   downloadResume(context);
-//                 } else {
-//                   onNavTap(_indexForId(nav.id));
-//                 }
-//                 onClose();
-//               },
-//               child: Padding(
-//                 padding: const EdgeInsets.only(bottom: 16),
-//                 child: Text(
-//                   nav.title,
-//                   style: GoogleFonts.poppins(
-//                     color: isActive ? AppColors.white : AppColors.secondary,
-//                     fontSize: 16,
-//                     fontWeight: FontWeight.w500,
-//                   ),
-//                 ),
-//               ),
-//             );
-//           }).toList(),
-//         ),
-//       )
-//           .animate()
-//           .fadeIn(duration: 200.ms)
-//           .slideY(begin: -0.1, duration: 200.ms),
-//     );
-//   }
-// }
