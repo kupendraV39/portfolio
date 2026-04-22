@@ -27,6 +27,7 @@ class _HeroSectionState extends State<HeroSection>
       vsync: this,
       duration: const Duration(milliseconds: 1500),
     )..repeat(reverse: true);
+
     _bounceAnim = Tween<double>(begin: 0, end: 24).animate(
       CurvedAnimation(parent: _bounceCtrl, curve: Curves.easeInOut),
     );
@@ -38,6 +39,66 @@ class _HeroSectionState extends State<HeroSection>
     super.dispose();
   }
 
+  Widget _buildMobileLayout(BuildContext context) {
+    return Column(
+      children: [
+        const SizedBox(height: 120),
+
+        // TEXT FIRST
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              RichText(
+                text: TextSpan(
+                  style: GoogleFonts.poppins(
+                    fontSize: 34,
+                    fontWeight: FontWeight.w900,
+                    color: AppColors.white,
+                    height: 1.1,
+                  ),
+                  children: const [
+                    TextSpan(text: "Hi, I'm "),
+                    TextSpan(
+                      text: AppConfig.heroName,
+                      style: TextStyle(color: AppColors.accent),
+                    ),
+                  ],
+                ),
+              )
+                  .animate()
+                  .fadeIn(duration: 600.ms)
+                  .slideX(begin: -0.2, duration: 600.ms),
+              const SizedBox(height: 10),
+              Text(
+                AppConfig.heroSubtitle.join('\n'),
+                style: GoogleFonts.poppins(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.white100,
+                  height: 1.4,
+                ),
+              )
+                  .animate()
+                  .fadeIn(delay: 200.ms, duration: 600.ms)
+                  .slideX(begin: -0.2, delay: 200.ms, duration: 600.ms),
+            ],
+          ),
+        ),
+
+        const SizedBox(height: 20),
+
+        // 3D MODEL BELOW
+        const Expanded(
+          child: IgnorePointer(
+            child: Computer3D(),
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -46,129 +107,134 @@ class _HeroSectionState extends State<HeroSection>
 
     return SizedBox(
       height: size.height,
-      child: Stack(
-        children: [
-          // ── Hero text (top-left) ──────────────────────────────
-          Positioned(
-            top: 120,
-            left: ph,
-            right: ph,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      child: isMobile
+          ? _buildMobileLayout(context)
+          : Stack(
               children: [
-                // Purple dot + vertical gradient line
-                Column(
-                  children: [
-                    Container(
-                      width: 20,
-                      height: 20,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColors.accent,
-                      ),
-                    ),
-                    Container(
-                      width: 4,
-                      height: isMobile ? 160 : 320,
-                      decoration: const BoxDecoration(
-                        gradient: AppColors.violetGradient,
-                      ),
-                    ),
-                  ],
+                // 3D BACKGROUND
+                const Positioned.fill(
+                  child: IgnorePointer(
+                    child: Computer3D(),
+                  ),
                 ),
-                const SizedBox(width: 20),
 
-                // Text
-                Expanded(
-                  child: Column(
+                // HERO TEXT
+                Positioned(
+                  top: 120,
+                  left: ph,
+                  right: ph,
+                  child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 4),
-                      RichText(
-                        text: TextSpan(
-                          style: GoogleFonts.poppins(
-                            fontSize: isMobile ? 40 : 60,
-                            fontWeight: FontWeight.w900,
-                            color: AppColors.white,
-                            height: 1.1,
-                          ),
-                          // ignore: prefer_const_literals_to_create_immutables
-                          children: [
-                            const TextSpan(text: "Hi, I'm "),
-                            const TextSpan(
-                              text: AppConfig.heroName,
-                              style: TextStyle(color: AppColors.accent),
+                      Column(
+                        children: [
+                          Container(
+                            width: 20,
+                            height: 20,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppColors.accent,
                             ),
+                          ),
+                          Container(
+                            width: 4,
+                            height: 320,
+                            decoration: const BoxDecoration(
+                              gradient: AppColors.violetGradient,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(width: 20),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            RichText(
+                              text: TextSpan(
+                                style: GoogleFonts.poppins(
+                                  fontSize: 60,
+                                  fontWeight: FontWeight.w900,
+                                  color: AppColors.white,
+                                  height: 1.1,
+                                ),
+                                children: const [
+                                  TextSpan(text: "Hi, I'm "),
+                                  TextSpan(
+                                    text: AppConfig.heroName,
+                                    style: TextStyle(
+                                      color: AppColors.accent,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                                .animate()
+                                .fadeIn(duration: 600.ms)
+                                .slideX(begin: -0.2, duration: 600.ms),
+                            const SizedBox(height: 8),
+                            Text(
+                              AppConfig.heroSubtitle.join('\n'),
+                              style: GoogleFonts.poppins(
+                                fontSize: 26,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.white100,
+                                height: 1.4,
+                              ),
+                            )
+                                .animate()
+                                .fadeIn(delay: 200.ms, duration: 600.ms)
+                                .slideX(
+                                    begin: -0.2,
+                                    delay: 200.ms,
+                                    duration: 600.ms),
                           ],
                         ),
-                      )
-                          .animate()
-                          .fadeIn(duration: 600.ms)
-                          .slideX(begin: -0.2, duration: 600.ms),
-
-                      const SizedBox(height: 8),
-
-                      Text(
-                        AppConfig.heroSubtitle.join('\n'),
-                        style: GoogleFonts.poppins(
-                          fontSize: isMobile ? 16 : 26,
-                          fontWeight: FontWeight.w500,
-                          color: AppColors.white100,
-                          height: 1.4,
-                        ),
-                      )
-                          .animate()
-                          .fadeIn(delay: 200.ms, duration: 600.ms)
-                          .slideX(begin: -0.2, delay: 200.ms, duration: 600.ms),
+                      ),
                     ],
                   ),
                 ),
-              ],
-            ),
-          ),
 
-          // ── 3D Computer model ────────────────────────────────
-          const Positioned.fill(
-            child: Computer3D(),
-          ),
-
-          // ── Scroll indicator (bottom center) ─────────────────
-          Positioned(
-            bottom: isMobile ? 80 : 40,
-            left: 0,
-            right: 0,
-            child: GestureDetector(
-              onTap: widget.onScrollDown,
-              child: Center(
-                child: Container(
-                  width: 35,
-                  height: 64,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(32),
-                    border: Border.all(color: AppColors.secondary, width: 4),
-                  ),
-                  padding: const EdgeInsets.all(8),
-                  alignment: Alignment.topCenter,
-                  child: AnimatedBuilder(
-                    animation: _bounceAnim,
-                    builder: (_, __) => Transform.translate(
-                      offset: Offset(0, _bounceAnim.value * 0.3),
+                // SCROLL INDICATOR
+                Positioned(
+                  bottom: isMobile ? 80 : 40,
+                  left: 0,
+                  right: 0,
+                  child: GestureDetector(
+                    onTap: widget.onScrollDown,
+                    child: Center(
                       child: Container(
-                        width: 10,
-                        height: 10,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.secondary,
+                        width: 35,
+                        height: 64,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(32),
+                          border: Border.all(
+                            color: AppColors.secondary,
+                            width: 4,
+                          ),
+                        ),
+                        padding: const EdgeInsets.all(8),
+                        alignment: Alignment.topCenter,
+                        child: AnimatedBuilder(
+                          animation: _bounceAnim,
+                          builder: (_, __) => Transform.translate(
+                            offset: Offset(0, _bounceAnim.value * 0.3),
+                            child: Container(
+                              width: 10,
+                              height: 10,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppColors.secondary,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                  ).animate().fadeIn(delay: 500.ms, duration: 600.ms),
                 ),
-              ),
-            ).animate().fadeIn(delay: 500.ms, duration: 600.ms),
-          ),
-        ],
-      ),
+              ],
+            ),
     );
   }
 }
